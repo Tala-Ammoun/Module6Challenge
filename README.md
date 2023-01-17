@@ -14,16 +14,16 @@ N/A
 To use code, you can review the javascript file above. To view the result of the code, you need to view them directly on the live web page by opening the Chrome DevTools by pressing Command+Option+I (macOS) or Control+Shift+I (Windows). A console panel should open either below or to the side of the webpage in the browser. There you will see the result of the code.
 
 You can find the link to the deployed live webpage here: 
-https://tala-ammoun.github.io/Module5Challenge/
+https://tala-ammoun.github.io/Nerd-Feud/
 
 
 Final Result:
 
-### Step 1
+### Sample Question
 ![Sample question](1.jpg)
 
 
-### Step 2
+### End Page
 ![End page](2.jpg)
 
 ## Credits
