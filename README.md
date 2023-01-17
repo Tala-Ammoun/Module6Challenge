@@ -20,11 +20,11 @@ https://tala-ammoun.github.io/Module5Challenge/
 Final Result:
 
 ### Step 1
-![How to find the live link.](1.jpg)
+![Sample question](1.jpg)
 
 
 ### Step 2
-![How to find the live link.](2.jpg)
+![End page](2.jpg)
 
 ## Credits
 
