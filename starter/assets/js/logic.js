@@ -18,8 +18,6 @@ let feedbackHide = document.querySelector(".feedback hide");
 let next = document.querySelector("#next"); //targets next button
 let prev = document.querySelector("#prev"); //targets prev button
 
-let index = 0
-
 let questions = [
     {
         questionTitle: "What was the first animal to be born?",
@@ -28,7 +26,7 @@ let questions = [
     },
 
     {
-        questionTitle: "what is the best chocolate bar?",
+        questionTitle: "What is the best chocolate bar?",
         choices: ["Snickers", "Bounty", "Toblerone", "KitKat", "Galaxy"],
         correctAnswer: 2
     },
@@ -36,11 +34,11 @@ let questions = [
     {
         questionTitle: "What is the best diamond?",
         choices: [
-            "the diamond that shines brightest",
-            "the biggest diamond",
-            "the diamond with the best clarity",
-            "the diamond with excellent cut and symmetry",
-            "the diamond with the least amount of color"],
+            "The diamond that shines brightest",
+            "The biggest diamond",
+            "The diamond with the best clarity",
+            "The diamond with excellent cut and symmetry",
+            "The diamond with the least amount of color"],
         correctAnswer: 3
     },
 
@@ -60,37 +58,37 @@ let questionsArr = []
 let choicesArr = []
 let correctAnsArr = []
 
-// let questionsObject = questions[index].questionTitle
-// let choices = questions[index].choices
-// let correctAnsArr = questions[index].correctAnswer
-// let questionsObject = element.questionTitle
-// questionsArr.push(questionsObject)
- // let choices = element.choices
-
-index = index + 1
-for (let b = 0; b < questions.length; b++) {
-    let element = questions[b];
-    console.log(element)
-
-    let correctAns = element.correctAnswer
-    correctAnsArr.push(correctAns)
-
-    function revealQA(index){
-    index = index + b
+let b = 0
+function revealQA(index) {
     hide.style.display = "block";
-    questionTitle.textContent = element.questionTitle
 
-    let choices = element.choices
+    let element = questions[b];
+    console.log(element);
+    
+    let correctAns = element.correctAnswer;
+    correctAnsArr.push(correctAns);
+
+    questionTitle.textContent = element.questionTitle;
+
+    let choices = element.choices;
     for (let i = 0; i < choices.length; i++) {
     let choicesList = document.createElement("li");
-    let choicesBtn = document.createElement("button")
-    choicesList.appendChild(choicesBtn)
-    choicesList.textContent = element.choices[i]
-    choicesList.setAttribute("data-index", i)
-    choicesId.appendChild(choicesList)
-    choicesArr.push(choices[i])
+    let choicesBtn = document.createElement("button");
+    choicesList.appendChild(choicesBtn);
+    choicesList.textContent = element.choices[i];
+    choicesList.setAttribute("data-index", i);
+    choicesId.appendChild(choicesList);
+    choicesArr.push(choices[i]);
+}
+    index = b++;
+    console.log(index) // 0-3
+    console.log(b) // 1-4
+}
 
-}}}
+function hideQA(){
+    questionTitle.textContent = ""
+    choicesId.textContent = ""
+}
 
 startBtn.addEventListener('click', function () {
     start.style.display = "none"
@@ -112,8 +110,9 @@ function clock() {
 }
 
 let incorrect = 0
+
 choicesId.addEventListener('click', function (event) { 
-        event.preventDefault();
+
         let answer = document.createElement("div");
         choicesId.appendChild(answer)
 
@@ -142,16 +141,21 @@ choicesId.addEventListener('click', function (event) {
             console.log(incorrect)
             // incorrectArr.push(incorrect)
         }
+        hideQA()
         revealQA()
+
+        if (b === questions.length){
+            clearInterval(timeInterval)
+            showEnd()}
     }
 )
 
-// questionsEl.addEventListener('click', function (event) { 
-// event.currentTarget.setAttribute("style", "display: none")}
-// )
+function showEnd(){
+    endScreen.setAttribute("style", "display: block")
+}
 
-// Sum up score
-// let totalScore = [questionsArr.length - incorrectArr.length]
+// //Sum up score
+// let totalScore = [questionsArr.length - incorrect]
 // finalScore.textContent = totalScore + "/" + questionsArr.length
 // let highestScore = totalScore [0]
 
@@ -180,17 +184,10 @@ choicesId.addEventListener('click', function (event) {
 //   }
 
 //   else {
-//     highscores.textContent = initials + ":" + scores
+//     finalScore.textContent = initials + ":" + scores
 //   }
 //   renderLastScore()
 // }
 
 // let lastScore = JSON.parse(localStorage.getItem("scores")); //retrieves data in the form of an object (score: 85)
 //     scores.textContent = scores; 
-
-
-// let element = event.target
-//     if (element.matches(".hide")){
-//         let state = element.getAttribute("")
-//     if  (state === "none")
-//         element.setAttribute("display", "block")}
