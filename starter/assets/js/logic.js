@@ -15,8 +15,6 @@ let initials = document.querySelector("#initials"); //targets the initials so th
 let submitBtn = document.querySelector("#submit"); //targets the submit button for initials
 let feedback = document.querySelector("#feedback"); //lets them see which questions they did wrong and display the correct answer.
 let feedbackHide = document.querySelector(".feedback hide");
-let next = document.querySelector("#next"); //targets next button
-let prev = document.querySelector("#prev"); //targets prev button
 
 let questions = [
     {
@@ -28,7 +26,7 @@ let questions = [
     {
         questionTitle: "What is the best chocolate bar?",
         choices: ["Snickers", "Bounty", "Toblerone", "KitKat", "Galaxy"],
-        correctAnswer: 2
+        correctAnswer: 1
     },
 
     {
@@ -39,7 +37,7 @@ let questions = [
             "The diamond with the best clarity",
             "The diamond with excellent cut and symmetry",
             "The diamond with the least amount of color"],
-        correctAnswer: 3
+        correctAnswer: 2
     },
 
     {
@@ -54,16 +52,11 @@ let questions = [
     },
 ]
 
-let questionsArr = []
-let choicesArr = []
-let correctAnsArr = []
-
-let b = 0
-function revealQA(index) {
+var index = 0
+function revealQA() {
     hide.style.display = "block";
 
-    let element = questions[b];
-    console.log(element);
+    let element = questions[index];
     
     let correctAns = element.correctAnswer;
     correctAnsArr.push(correctAns);
@@ -78,12 +71,12 @@ function revealQA(index) {
     choicesList.textContent = element.choices[i];
     choicesList.setAttribute("data-index", i);
     choicesId.appendChild(choicesList);
-    choicesArr.push(choices[i]);
+    choicesArr.push(choices[i]);}
 }
-    index = b++;
-    console.log(index) // 0-3
-    console.log(b) // 1-4
-}
+
+let questionsArr = []
+let choicesArr = []
+let correctAnsArr = [] //only one these items is correct at a time
 
 function hideQA(){
     questionTitle.textContent = ""
@@ -98,7 +91,6 @@ startBtn.addEventListener('click', function () {
 
 let timeLeft = 0 // 5 minutes
 function clock() {
-    //initialize to 0 then start again
     timeLeft = 300
     let timeInterval = setInterval(function () {
         timeLeft--;
@@ -111,83 +103,83 @@ function clock() {
 
 let incorrect = 0
 
-choicesId.addEventListener('click', function (event) { 
+choicesId.addEventListener('click', function(event) { 
+    let answer = document.createElement("div");
+    choicesId.appendChild(answer)
 
-        let answer = document.createElement("div");
-        choicesId.appendChild(answer)
+    let audio = document.createElement("AUDIO")
+    choicesId.appendChild(audio)
 
-        let audio = document.createElement("AUDIO")
-        choicesId.appendChild(audio)
+    setTimeout(function() {
+    if (event.target.matches("li")){
+    let clickedLi = event.target.getAttribute("data-index")
+    
+    if (clickedLi == correctAnsArr[index])
+        answer.textContent  = "Correct!"
+        answer.setAttribute ("style", "color: green");
+        audio.setAttribute("src","assets/sfx/correct.wav");
+        audio.play()}
+    else {
+        answer.textContent = "Incorrect! The right answer is " + correctAnsArr[index]
+        answer.setAttribute ("style", "color: red");
 
-        if (event.target.matches("li")){
-            //event.target.textContent === correctAnsArr
-            let clickedLi = event.target.getAttribute("data-index")
-        if (clickedLi === correctAnsArr)
-            answer.textContent  = "Correct!"
-            answer.setAttribute ("style", "color: green");
-            audio.setAttribute("src","assets/sfx/correct.wav");
-            audio.play()
-        }
-        else {
-            answer.textContent = "Incorrect! The right answer is " + correctAnsArr
-            answer.setAttribute ("style", "color: red");
+        audio.setAttribute("src","assets/sfx/incorrect.wav");
+        audio.play()
 
-            audio.setAttribute("src","assets/sfx/incorrect.wav");
-            audio.play()
+        timeLeft = timeLeft - 10;
 
-            timeLeft = timeLeft - 10;
-
-            incorrect++
-            console.log(incorrect)
-            // incorrectArr.push(incorrect)
-        }
+        incorrect++ //increases by 1 with each wrong answer
+        }}, 300);
+        index++;
         hideQA()
         revealQA()
 
-        if (b === questions.length){
-            clearInterval(timeInterval)
+        if(index === questions.length-1){
             showEnd()}
-    }
+    } 
 )
 
 function showEnd(){
     endScreen.setAttribute("style", "display: block")
+    timer.setAttribute("style", "display: none")
 }
 
-// //Sum up score
-// let totalScore = [questionsArr.length - incorrect]
-// finalScore.textContent = totalScore + "/" + questionsArr.length
-// let highestScore = totalScore [0]
+// Sum up score
+let correct = [questions.length - incorrect] 
+finalScore.textContent = correct + "/" + questions.length
 
-// for (let c = 0; c < totalScore.length; c++) {
-// if (highestScore < totalScore[c]) {
-//     highestScore = totalScore [c]}
-//     localStorage.setItem("highestScore", JSON.stringify(highestScore))}
+let highestScore = correct [0]
+for (let c = 0; c < correct.length; c++) {
+if (highestScore < correct[c]) { // if there is a higher number of correct answers
+    highestScore = correct [c]} // let the new number be the high score
+localStorage.setItem("highestScore", highestScore)}
 
-// submitBtn.addEventListener("click", function(event) {
-//       event.preventDefault(); //prevents page from refreshing everytime we click submit.
-//       let initials = initials.value
-//       if (initials === "") {
-//         initials.innerHTML = "error", "Your initials cannot be blank"}
-//         else {
-//         initials.innerHTML = "success", "Your initials are saved!";
-//         localStorage.setItem("initials", JSON.stringify(initials))}})
+let initialsEl = initials.value
 
-// renderLastScore(); //display the stored highest scores and their corresponding initials
+submitBtn.addEventListener("click", function(event) {
+    event.preventDefault(); //prevents page from refreshing everytime we click submit.
+    feedback.setAttribute("style", "display: block")
+    if (initialsEl === " ") {
+        feedback.textContent = "Error. Your initials cannot be blank"}
+    else {
+        feedback.textContent = "Success. Your initials are saved!";
+        localStorage.setItem("initialsEl", JSON.stringify(initialsEl))
+        }
+    endScreen.setAttribute("style", "display: none")
+})
 
-// function renderLastScore() { //this function retrieves information and displays it on the page
-//   let initials = localStorage.getItem("initials")
-//   let scores = localStorage.getItem("highestScore")
+renderLastScore(); //display the stored highest scores and their corresponding initials
 
-//   if(initials == "" || highestScore == ""){ //If the last score is null,
-//     return; //return early from this function.
-//   }
+function renderLastScore() { //this function retrieves information and displays it on the page
+  let initialsEn = localStorage.getItem("initials")
+  let highestScores = localStorage.getItem("highestScore")
 
-//   else {
-//     finalScore.textContent = initials + ":" + scores
-//   }
-//   renderLastScore()
-// }
+  if(initialsEn == "" || highestScores == ""){ //If the last scores and initials are null,
+    return; //return early from this function.
+  }
 
-// let lastScore = JSON.parse(localStorage.getItem("scores")); //retrieves data in the form of an object (score: 85)
-//     scores.textContent = scores; 
+  else {
+    feedback.textContent = initials + ":" + highestScores
+  }
+  //renderLastScore()
+}
